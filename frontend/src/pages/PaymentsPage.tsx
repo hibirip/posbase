@@ -22,7 +22,7 @@ export default function PaymentsPage() {
   }, 0) || 0
 
   return (
-    <div className="space-y-4 md:space-y-6 animate-fade-in">
+    <div className="space-y-3 md:space-y-4 animate-fade-in">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -35,8 +35,8 @@ export default function PaymentsPage() {
       </div>
 
       {/* Filters */}
-      <div className="glass-card p-4">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="glass-card p-3">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div>
             <label className="label">거래처</label>
             <select
@@ -72,7 +72,7 @@ export default function PaymentsPage() {
       </div>
 
       {/* Summary */}
-      <div className="glass-card p-4">
+      <div className="glass-card p-3">
         <div className="flex items-center justify-between">
           <span className="text-fg-secondary">조회된 입금 합계</span>
           <span className={`font-mono font-bold text-xl ${totalAmount >= 0 ? 'text-success' : 'text-danger'}`}>
@@ -83,9 +83,9 @@ export default function PaymentsPage() {
 
       {/* Payments List */}
       {isLoading ? (
-        <div className="space-y-4">
+        <div className="space-y-3">
           {[1, 2, 3].map(i => (
-            <div key={i} className="glass-card p-4">
+            <div key={i} className="glass-card p-3">
               <div className="skeleton skeleton-text w-1/4 mb-2" />
               <div className="skeleton skeleton-text w-1/2" />
             </div>
@@ -96,9 +96,9 @@ export default function PaymentsPage() {
           <p className="text-fg-tertiary text-lg">입금 내역이 없습니다.</p>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-2">
           {payments?.map((payment) => (
-            <div key={payment.id} className="glass-card p-4">
+            <div key={payment.id} className="glass-card p-3">
               <div className="flex items-start justify-between">
                 <div>
                   <div className="flex items-center gap-2">

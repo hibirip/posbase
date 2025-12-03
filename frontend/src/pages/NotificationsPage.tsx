@@ -10,6 +10,7 @@ import {
   AlertTriangle,
   AlertCircle,
   Package,
+  Camera,
   X,
   CheckCheck,
   ExternalLink,
@@ -40,10 +41,11 @@ export default function NotificationsPage() {
     long_pending_backorder: notifications?.filter(n => n.type === 'long_pending_backorder') || [],
     out_of_stock: notifications?.filter(n => n.type === 'out_of_stock') || [],
     low_stock: notifications?.filter(n => n.type === 'low_stock') || [],
+    overdue_sample: notifications?.filter(n => n.type === 'overdue_sample') || [],
   }
 
   return (
-    <div className="space-y-4 md:space-y-6 animate-fade-in">
+    <div className="space-y-3 md:space-y-4 animate-fade-in">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -65,9 +67,9 @@ export default function NotificationsPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-        <div className="glass-card p-4">
-          <div className="flex items-center gap-2 mb-2">
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-2 md:gap-3">
+        <div className="glass-card p-3">
+          <div className="flex items-center gap-2 mb-1.5">
             <AlertTriangle size={16} strokeWidth={1.5} className="text-warning" />
             <p className="data-label">미수금 연체</p>
           </div>
@@ -75,8 +77,8 @@ export default function NotificationsPage() {
             {counts?.overdue_credit_count || 0}건
           </p>
         </div>
-        <div className="glass-card p-4">
-          <div className="flex items-center gap-2 mb-2">
+        <div className="glass-card p-3">
+          <div className="flex items-center gap-2 mb-1.5">
             <AlertCircle size={16} strokeWidth={1.5} className="text-point" />
             <p className="data-label">미송 장기 대기</p>
           </div>
@@ -84,8 +86,17 @@ export default function NotificationsPage() {
             {counts?.long_pending_backorder_count || 0}건
           </p>
         </div>
-        <div className="glass-card p-4">
-          <div className="flex items-center gap-2 mb-2">
+        <div className="glass-card p-3">
+          <div className="flex items-center gap-2 mb-1.5">
+            <Camera size={16} strokeWidth={1.5} className="text-danger" />
+            <p className="data-label">샘플 연체</p>
+          </div>
+          <p className="data-value data-value-lg text-danger">
+            {counts?.overdue_sample_count || 0}건
+          </p>
+        </div>
+        <div className="glass-card p-3">
+          <div className="flex items-center gap-2 mb-1.5">
             <Package size={16} strokeWidth={1.5} className="text-danger" />
             <p className="data-label">품절</p>
           </div>
@@ -93,8 +104,8 @@ export default function NotificationsPage() {
             {counts?.out_of_stock_count || 0}건
           </p>
         </div>
-        <div className="glass-card p-4">
-          <div className="flex items-center gap-2 mb-2">
+        <div className="glass-card p-3">
+          <div className="flex items-center gap-2 mb-1.5">
             <Package size={16} strokeWidth={1.5} className="text-fg-secondary" />
             <p className="data-label">재고 부족</p>
           </div>
@@ -106,9 +117,9 @@ export default function NotificationsPage() {
 
       {/* Notifications List */}
       {isLoading ? (
-        <div className="space-y-4">
+        <div className="space-y-3">
           {[1, 2, 3].map(i => (
-            <div key={i} className="glass-card p-4">
+            <div key={i} className="glass-card p-3">
               <div className="skeleton skeleton-text w-1/4 mb-2" />
               <div className="skeleton skeleton-text w-1/2" />
             </div>
@@ -121,7 +132,7 @@ export default function NotificationsPage() {
           <p className="text-fg-muted text-sm mt-1">모든 상황이 정상입니다</p>
         </div>
       ) : (
-        <div className="space-y-6">
+        <div className="space-y-4">
           {/* 미수금 연체 */}
           {groupedNotifications.overdue_credit.length > 0 && (
             <NotificationSection
@@ -162,6 +173,17 @@ export default function NotificationsPage() {
               icon={<Package size={18} strokeWidth={1.5} className="text-fg-secondary" />}
               badgeClass="badge-neutral"
               notifications={groupedNotifications.low_stock}
+              onDismiss={handleDismiss}
+            />
+          )}
+
+          {/* 샘플 연체 */}
+          {groupedNotifications.overdue_sample.length > 0 && (
+            <NotificationSection
+              title="샘플 연체"
+              icon={<Camera size={18} strokeWidth={1.5} className="text-danger" />}
+              badgeClass="badge-danger"
+              notifications={groupedNotifications.overdue_sample}
               onDismiss={handleDismiss}
             />
           )}
@@ -217,7 +239,7 @@ interface NotificationItemProps {
 
 function NotificationItem({ notification, onDismiss }: NotificationItemProps) {
   return (
-    <div className="p-4 hover:bg-bg-hover transition-colors">
+    <div className="p-3 hover:bg-bg-hover transition-colors">
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1 min-w-0">
           <p className="text-sm text-fg-primary">{notification.message}</p>

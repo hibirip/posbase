@@ -7,10 +7,12 @@ import {
   Home,
   ShoppingCart,
   Package,
+  Boxes,
   Building2,
   Wallet,
   Truck,
   RotateCcw,
+  Camera,
   BarChart3,
   Bell,
   LogOut,
@@ -22,10 +24,12 @@ const navItems = [
   { path: '/', label: '홈', icon: Home },
   { path: '/sales', label: '판매', icon: ShoppingCart },
   { path: '/products', label: '상품', icon: Package },
+  { path: '/inventory', label: '재고', icon: Boxes },
   { path: '/customers', label: '거래처', icon: Building2 },
   { path: '/payments', label: '입금', icon: Wallet },
   { path: '/backorders', label: '미송', icon: Truck },
   { path: '/returns', label: '반품', icon: RotateCcw },
+  { path: '/samples', label: '샘플', icon: Camera },
   { path: '/stats', label: '통계', icon: BarChart3 },
 ]
 
@@ -49,7 +53,7 @@ export default function DashboardLayout() {
         }`}
       >
         {/* Logo */}
-        <div className="h-14 flex items-center justify-between px-4 border-b border-border-subtle">
+        <div className="h-12 flex items-center justify-between px-3 border-b border-border-subtle">
           {isSidebarOpen && (
             <Link to="/" className="text-lg font-bold text-fg-primary">
               POS<span className="text-point">BASE</span>
@@ -64,7 +68,7 @@ export default function DashboardLayout() {
         </div>
 
         {/* Navigation */}
-        <nav className="p-2 space-y-1">
+        <nav className="p-1.5 space-y-0.5">
           {navItems.map((item) => (
             <NavLink
               key={item.path}
@@ -87,7 +91,7 @@ export default function DashboardLayout() {
         </nav>
 
         {/* User Profile */}
-        <div className="absolute bottom-0 left-0 right-0 p-3 border-t border-border-subtle">
+        <div className="absolute bottom-0 left-0 right-0 p-2.5 border-t border-border-subtle">
           {isSidebarOpen ? (
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-md bg-bg-tertiary flex items-center justify-center text-fg-secondary text-sm font-medium">
@@ -128,8 +132,8 @@ export default function DashboardLayout() {
         }`}
       >
         {/* Header - Mobile */}
-        <header className="h-14 bg-bg-secondary/95 backdrop-blur-lg border-b border-border-subtle sticky top-0 z-30 md:hidden">
-          <div className="h-full px-4 flex items-center justify-between">
+        <header className="h-12 bg-bg-secondary/95 backdrop-blur-lg border-b border-border-subtle sticky top-0 z-30 md:hidden">
+          <div className="h-full px-3 flex items-center justify-between">
             <Link to="/" className="text-lg font-bold text-fg-primary">
               POS<span className="text-point">BASE</span>
             </Link>
@@ -147,8 +151,8 @@ export default function DashboardLayout() {
         </header>
 
         {/* Header - Desktop */}
-        <header className="h-14 bg-bg-secondary/80 backdrop-blur-sm border-b border-border-subtle sticky top-0 z-30 hidden md:block">
-          <div className="h-full px-6 flex items-center justify-between">
+        <header className="h-12 bg-bg-secondary/80 backdrop-blur-sm border-b border-border-subtle sticky top-0 z-30 hidden md:block">
+          <div className="h-full px-4 flex items-center justify-between">
             <div className="flex items-center gap-4">
               {/* 빈 공간 또는 브레드크럼 */}
             </div>
@@ -182,7 +186,7 @@ export default function DashboardLayout() {
         </header>
 
         {/* Page Content */}
-        <div className="p-4 md:p-6 pb-24 md:pb-6">
+        <div className="p-3 md:p-4 pb-20 md:pb-4">
           <Outlet />
         </div>
       </main>

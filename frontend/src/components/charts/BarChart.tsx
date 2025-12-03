@@ -23,10 +23,10 @@ interface BarChartProps {
 }
 
 const COLORS = {
-  primary: '#0052FF',
-  success: '#00C805',
-  warning: '#FF9500',
-  danger: '#FF3B30',
+  primary: '#3ECF8E',   // Supabase Green
+  success: '#22C55E',   // Muted Green
+  warning: '#F59E0B',   // Muted Amber
+  danger: '#EF4444',    // Muted Red
 }
 
 export default function BarChart({

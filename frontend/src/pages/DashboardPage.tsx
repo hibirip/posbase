@@ -50,7 +50,7 @@ export default function DashboardPage() {
   })) || []
 
   return (
-    <div className="space-y-4 md:space-y-6 animate-fade-in">
+    <div className="space-y-3 md:space-y-4 animate-fade-in">
       {/* Welcome */}
       <div>
         <h1 className="text-xl md:text-2xl font-bold text-fg-primary">
@@ -60,7 +60,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3">
         <StatCard
           label="오늘 매출"
           value={todayStats?.totalSales || 0}
@@ -87,7 +87,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 md:gap-4">
+      <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 md:gap-3">
         <QuickAction icon={ShoppingCart} label="판매 등록" to="/sales/new" />
         <QuickAction icon={Package} label="상품 등록" to="/products/new" />
         <QuickAction icon={Building2} label="거래처 등록" to="/customers/new" />
@@ -97,7 +97,7 @@ export default function DashboardPage() {
 
       {/* Mini Charts */}
       {weeklyChartData.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3">
           <ChartCard title="주간 매출 추이" subtitle="최근 7일" size="mini">
             <BarChart data={weeklyChartData} size="mini" color="primary" />
           </ChartCard>
@@ -108,8 +108,8 @@ export default function DashboardPage() {
       )}
 
       {/* Recent Sales */}
-      <div className="glass-card p-4 md:p-5">
-        <div className="flex items-center justify-between mb-4">
+      <div className="glass-card p-3 md:p-4">
+        <div className="flex items-center justify-between mb-3">
           <h2 className="text-lg font-semibold text-fg-primary">오늘 판매</h2>
           <Link to="/sales" className="text-sm text-fg-secondary hover:text-fg-primary transition-colors">
             전체 보기
@@ -124,11 +124,11 @@ export default function DashboardPage() {
             </Link>
           </div>
         ) : (
-          <div className="space-y-2">
+          <div className="space-y-1.5">
             {todaySales.slice(0, 5).map((sale) => (
               <div
                 key={sale.id}
-                className="flex items-center justify-between p-3 bg-bg-tertiary/50 rounded-md"
+                className="flex items-center justify-between p-2.5 bg-bg-tertiary/50 rounded-md"
               >
                 <div>
                   <p className="font-medium text-fg-primary text-sm">
@@ -160,19 +160,19 @@ export default function DashboardPage() {
 
       {/* Unpaid Customers */}
       {customersWithBalance && customersWithBalance.length > 0 && (
-        <div className="glass-card p-4 md:p-5">
-          <div className="flex items-center justify-between mb-4">
+        <div className="glass-card p-3 md:p-4">
+          <div className="flex items-center justify-between mb-3">
             <h2 className="text-lg font-semibold text-fg-primary">외상 거래처</h2>
             <Link to="/customers" className="text-sm text-fg-secondary hover:text-fg-primary transition-colors">
               전체 보기
             </Link>
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-1.5">
             {customersWithBalance.slice(0, 5).map((customer) => (
               <div
                 key={customer.id}
-                className="flex items-center justify-between p-3 bg-bg-tertiary/50 rounded-md"
+                className="flex items-center justify-between p-2.5 bg-bg-tertiary/50 rounded-md"
               >
                 <div>
                   <p className="font-medium text-fg-primary text-sm">
@@ -193,8 +193,8 @@ export default function DashboardPage() {
 
       {/* Pending Backorders */}
       {pendingBackorders && pendingBackorders.length > 0 && (
-        <div className="glass-card p-4 md:p-5">
-          <div className="flex items-center justify-between mb-4">
+        <div className="glass-card p-3 md:p-4">
+          <div className="flex items-center justify-between mb-3">
             <h2 className="text-lg font-semibold text-fg-primary">
               대기 중인 미송
               <span className="ml-2 text-sm font-normal text-warning">
@@ -206,11 +206,11 @@ export default function DashboardPage() {
             </Link>
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-1.5">
             {pendingBackorders.slice(0, 5).map((backorder) => (
               <div
                 key={backorder.id}
-                className="flex items-center justify-between p-3 bg-bg-tertiary/50 rounded-md"
+                className="flex items-center justify-between p-2.5 bg-bg-tertiary/50 rounded-md"
               >
                 <div>
                   <p className="font-medium text-fg-primary text-sm">
@@ -261,9 +261,9 @@ function StatCard({ label, value, format, suffix, variant = 'default' }: StatCar
   }[variant]
 
   return (
-    <div className={`glass-card p-4 min-w-0 ${variantClass}`}>
+    <div className={`glass-card p-3 min-w-0 ${variantClass}`}>
       <p className="data-label">{label}</p>
-      <p className={`font-mono font-bold mt-2 truncate ${isLongNumber ? 'text-xl' : 'text-2xl'}`}>
+      <p className={`font-mono font-bold mt-1 truncate ${isLongNumber ? 'text-xl' : 'text-2xl'}`}>
         {format === 'currency' && '₩'}
         {formattedValue}
         {suffix && <span className="text-base ml-1">{suffix}</span>}
@@ -284,7 +284,7 @@ function QuickAction({ icon: Icon, label, to, badge }: QuickActionProps) {
   return (
     <Link
       to={to}
-      className="glass-card p-4 flex flex-col items-center gap-2 hover:bg-bg-hover transition-colors cursor-pointer relative"
+      className="glass-card p-3 flex flex-col items-center gap-1.5 hover:bg-bg-hover transition-colors cursor-pointer relative"
     >
       <div className="relative">
         <Icon size={24} strokeWidth={1.5} className="text-fg-secondary" />

@@ -22,7 +22,13 @@ interface DonutChartProps {
   centerValue?: string
 }
 
-const DEFAULT_COLORS = ['#0052FF', '#00C805', '#FF9500', '#FF3B30', '#8E8E93']
+const DEFAULT_COLORS = [
+  '#3ECF8E',  // Supabase Green (메인)
+  '#38BDF8',  // Sky Blue
+  '#A78BFA',  // Violet
+  '#FB923C',  // Orange (muted)
+  '#6B7280',  // Gray
+]
 
 export default function DonutChart({
   data,

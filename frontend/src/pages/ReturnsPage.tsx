@@ -35,7 +35,7 @@ export default function ReturnsPage() {
   }
 
   return (
-    <div className="space-y-4 md:space-y-6 animate-fade-in">
+    <div className="space-y-3 md:space-y-4 animate-fade-in">
       {/* Header */}
       <div>
         <h1 className="text-xl md:text-2xl font-bold text-fg-primary">반품 관리</h1>
@@ -43,20 +43,20 @@ export default function ReturnsPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-2 md:gap-4">
-        <div className="glass-card p-4">
+      <div className="grid grid-cols-3 gap-2 md:gap-3">
+        <div className="glass-card p-3">
           <p className="data-label">대기 중</p>
           <p className="data-value data-value-lg mt-1 text-warning">
             {stats?.pendingCount || 0}건
           </p>
         </div>
-        <div className="glass-card p-4">
+        <div className="glass-card p-3">
           <p className="data-label">총 환불액</p>
           <p className="data-value data-value-lg mt-1">
             ₩{(stats?.totalRefunded || 0).toLocaleString()}
           </p>
         </div>
-        <div className="glass-card p-4">
+        <div className="glass-card p-3">
           <p className="data-label">이번 달 반품</p>
           <p className="data-value data-value-lg mt-1">
             {stats?.thisMonthCount || 0}건
@@ -90,9 +90,9 @@ export default function ReturnsPage() {
 
       {/* Returns List */}
       {isLoading ? (
-        <div className="space-y-4">
+        <div className="space-y-3">
           {[1, 2, 3].map(i => (
-            <div key={i} className="glass-card p-4">
+            <div key={i} className="glass-card p-3">
               <div className="skeleton skeleton-text w-1/4 mb-2" />
               <div className="skeleton skeleton-text w-1/2" />
             </div>
@@ -105,7 +105,7 @@ export default function ReturnsPage() {
           </p>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-2">
           {returns?.map((returnItem) => (
             <ReturnCard
               key={returnItem.id}
@@ -137,7 +137,7 @@ function ReturnCard({ returnItem, onComplete, onCancel, isProcessing }: ReturnCa
   }[returnItem.status]
 
   return (
-    <div className="glass-card p-4 hover:bg-bg-hover transition-colors">
+    <div className="glass-card p-3 hover:bg-bg-hover transition-colors">
       <div className="flex items-start justify-between">
         <div className="flex-1 min-w-0">
           {/* 상태 & 상품명 */}

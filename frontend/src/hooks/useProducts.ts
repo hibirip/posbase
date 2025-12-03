@@ -223,3 +223,32 @@ export function useDeleteVariant() {
     },
   })
 }
+
+// 여러 옵션 재고 일괄 수정
+export function useBatchUpdateVariants() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (updates: { id: string; stock: number }[]) => {
+      // 변경된 항목만 필터링
+      if (updates.length === 0) return
+
+      // 병렬로 업데이트
+      const promises = updates.map(({ id, stock }) =>
+        supabase
+          .from('product_variants')
+          .update({ stock })
+          .eq('id', id)
+      )
+
+      const results = await Promise.all(promises)
+
+      // 에러 체크
+      const error = results.find((r) => r.error)?.error
+      if (error) throw error
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['products'] })
+    },
+  })
+}

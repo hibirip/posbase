@@ -33,7 +33,7 @@ export default function CustomersPage() {
   }
 
   return (
-    <div className="space-y-4 md:space-y-6 animate-fade-in">
+    <div className="space-y-3 md:space-y-4 animate-fade-in">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -48,12 +48,12 @@ export default function CustomersPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 gap-3 md:gap-4">
-        <div className="glass-card p-4">
+      <div className="grid grid-cols-2 gap-2 md:gap-3">
+        <div className="glass-card p-3">
           <p className="data-label">외상 보유 거래처</p>
           <p className="data-value data-value-lg mt-1">{customersWithBalance}개</p>
         </div>
-        <div className="glass-card p-4">
+        <div className="glass-card p-3">
           <p className="data-label">총 미수금</p>
           <p className="data-value data-value-lg mt-1 text-warning">
             ₩{totalBalance.toLocaleString()}
@@ -62,7 +62,7 @@ export default function CustomersPage() {
       </div>
 
       {/* Search */}
-      <div className="flex gap-4">
+      <div className="flex gap-3">
         <input
           type="text"
           className="input flex-1"
@@ -74,9 +74,9 @@ export default function CustomersPage() {
 
       {/* Customers List */}
       {isLoading ? (
-        <div className="space-y-4">
+        <div className="space-y-3">
           {[1, 2, 3].map(i => (
-            <div key={i} className="glass-card p-4">
+            <div key={i} className="glass-card p-3">
               <div className="skeleton skeleton-text w-1/3 mb-2" />
               <div className="skeleton skeleton-text w-1/2" />
             </div>
@@ -94,7 +94,7 @@ export default function CustomersPage() {
           )}
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-2">
           {filteredCustomers?.map((customer) => (
             <CustomerCard
               key={customer.id}
@@ -116,7 +116,7 @@ interface CustomerCardProps {
 
 function CustomerCard({ customer, onDelete }: CustomerCardProps) {
   return (
-    <div className="glass-card p-4 hover:bg-bg-hover transition-colors">
+    <div className="glass-card p-3 hover:bg-bg-hover transition-colors">
       <div className="flex items-start justify-between">
         <div className="flex-1 min-w-0">
           {/* 업체명 */}

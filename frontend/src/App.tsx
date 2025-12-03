@@ -19,9 +19,11 @@ import NewSalePage from '@/pages/NewSalePage'
 import PaymentsPage from '@/pages/PaymentsPage'
 import BackordersPage from '@/pages/BackordersPage'
 import ReturnsPage from '@/pages/ReturnsPage'
+import SamplesPage from '@/pages/SamplesPage'
 import NotificationsPage from '@/pages/NotificationsPage'
 import StatsPage from '@/pages/StatsPage'
 import MorePage from '@/pages/MorePage'
+import InventoryPage from '@/pages/InventoryPage'
 
 function App() {
   const { initialize, isInitialized } = useAuthStore()
@@ -53,6 +55,9 @@ function App() {
         <Route path="/products/new" element={<ProductFormPage />} />
         <Route path="/products/:id" element={<ProductFormPage />} />
 
+        {/* 재고 */}
+        <Route path="/inventory" element={<InventoryPage />} />
+
         {/* 거래처 */}
         <Route path="/customers" element={<CustomersPage />} />
         <Route path="/customers/new" element={<CustomerFormPage />} />
@@ -70,6 +75,9 @@ function App() {
 
         {/* 반품 */}
         <Route path="/returns" element={<ReturnsPage />} />
+
+        {/* 샘플 */}
+        <Route path="/samples" element={<SamplesPage />} />
 
         {/* 알림 */}
         <Route path="/notifications" element={<NotificationsPage />} />

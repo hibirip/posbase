@@ -200,7 +200,7 @@ export default function NewSalePage() {
   const CartContent = () => (
     <div className="flex flex-col h-full">
       {/* 거래처 선택 */}
-      <div className="p-4 border-b border-border-subtle">
+      <div className="p-3 border-b border-border-subtle">
         <div className="relative">
           <input
             type="text"
@@ -258,15 +258,15 @@ export default function NewSalePage() {
       </div>
 
       {/* 장바구니 아이템 */}
-      <div className="flex-1 overflow-auto p-4">
+      <div className="flex-1 overflow-auto p-3">
         {cart.length === 0 ? (
           <div className="text-center py-8 text-fg-tertiary">
             <p>상품을 선택해주세요</p>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-2">
             {cart.map((item) => (
-              <div key={item.id} className={`flex items-center gap-3 p-3 rounded-lg ${item.backorderQty > 0 ? 'bg-warning/10 border border-warning/30' : 'bg-bg-tertiary'}`}>
+              <div key={item.id} className={`flex items-center gap-2 p-2.5 rounded-lg ${item.backorderQty > 0 ? 'bg-warning/10 border border-warning/30' : 'bg-bg-tertiary'}`}>
                 <div className="flex-1 min-w-0">
                   <p className="font-medium text-fg-primary text-sm truncate">
                     {item.product_name}
@@ -319,7 +319,7 @@ export default function NewSalePage() {
       </div>
 
       {/* 결제 정보 */}
-      <div className="border-t border-border-subtle p-4 space-y-3 bg-bg-secondary">
+      <div className="border-t border-border-subtle p-3 space-y-2.5 bg-bg-secondary">
         {/* 할인 */}
         <div className="flex items-center justify-between">
           <span className="text-sm text-fg-secondary">할인</span>
@@ -431,10 +431,10 @@ export default function NewSalePage() {
   return (
     <>
       {/* Desktop Layout */}
-      <div className="hidden md:flex h-[calc(100vh-7rem)] gap-4 animate-fade-in">
+      <div className="hidden md:flex h-[calc(100vh-6rem)] gap-3 animate-fade-in">
         {/* Left: 상품 선택 */}
         <div className="flex-1 flex flex-col">
-          <div className="mb-4">
+          <div className="mb-3">
             <input
               type="text"
               className="input"
@@ -445,7 +445,7 @@ export default function NewSalePage() {
           </div>
 
           <div className="flex-1 overflow-auto">
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-2">
               {filteredProducts.map((product) => (
                 <ProductCard
                   key={product.id}
@@ -472,7 +472,7 @@ export default function NewSalePage() {
       {/* Mobile Layout */}
       <div className="md:hidden animate-fade-in">
         {/* 상품 검색 */}
-        <div className="mb-4">
+        <div className="mb-3">
           <input
             type="text"
             className="input"
@@ -483,7 +483,7 @@ export default function NewSalePage() {
         </div>
 
         {/* 상품 그리드 */}
-        <div className="grid grid-cols-2 gap-3 pb-24">
+        <div className="grid grid-cols-2 gap-2 pb-20">
           {filteredProducts.map((product) => (
             <ProductCard
               key={product.id}

@@ -15,7 +15,8 @@ export type PaymentType = 'deposit' | 'refund'
 export type StockChangeType = 'sale' | 'return' | 'incoming' | 'adjustment' | 'cancel'
 export type BackorderStatus = 'pending' | 'completed' | 'cancelled'
 export type ReturnStatus = 'pending' | 'completed' | 'cancelled'
-export type NotificationType = 'overdue_credit' | 'long_pending_backorder' | 'low_stock' | 'out_of_stock'
+export type SampleStatus = 'out' | 'returned' | 'cancelled'
+export type NotificationType = 'overdue_credit' | 'long_pending_backorder' | 'low_stock' | 'out_of_stock' | 'overdue_sample'
 
 export interface Database {
   public: {
@@ -476,6 +477,61 @@ export interface Database {
           dismissed_at?: string
         }
       }
+      samples: {
+        Row: {
+          id: string
+          user_id: string
+          customer_id: string
+          variant_id: string
+          product_name: string
+          color: string | null
+          size: string | null
+          quantity: number
+          status: SampleStatus
+          deduct_stock: boolean
+          out_date: string
+          return_due: string
+          returned_at: string | null
+          memo: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          customer_id: string
+          variant_id: string
+          product_name: string
+          color?: string | null
+          size?: string | null
+          quantity: number
+          status?: SampleStatus
+          deduct_stock?: boolean
+          out_date?: string
+          return_due: string
+          returned_at?: string | null
+          memo?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          customer_id?: string
+          variant_id?: string
+          product_name?: string
+          color?: string | null
+          size?: string | null
+          quantity?: number
+          status?: SampleStatus
+          deduct_stock?: boolean
+          out_date?: string
+          return_due?: string
+          returned_at?: string | null
+          memo?: string | null
+          updated_at?: string
+        }
+      }
     }
     Views: {
       [_ in never]: never
@@ -538,6 +594,7 @@ export type Payment = Tables<'payments'>
 export type StockLog = Tables<'stock_logs'>
 export type Backorder = Tables<'backorders'>
 export type Return = Tables<'returns'>
+export type Sample = Tables<'samples'>
 
 // 확장 타입 (관계 포함)
 export type ProductWithVariants = Product & {
@@ -561,6 +618,11 @@ export type ReturnWithDetails = Return & {
   variant?: { id: string; stock: number } | null
 }
 
+export type SampleWithDetails = Sample & {
+  customer?: { id: string; name: string; phone?: string | null } | null
+  variant?: { id: string; stock: number } | null
+}
+
 export type NotificationDismissal = Tables<'notification_dismissals'>
 
 // 알림 관련 타입
@@ -569,6 +631,7 @@ export interface NotificationCounts {
   long_pending_backorder_count: number
   low_stock_count: number
   out_of_stock_count: number
+  overdue_sample_count: number
   total_count: number
 }
 
@@ -608,6 +671,18 @@ export interface OutOfStockNotification {
   size: string
 }
 
+export interface OverdueSampleNotification {
+  sample_id: string
+  customer_name: string
+  product_name: string
+  color: string | null
+  size: string | null
+  quantity: number
+  out_date: string
+  return_due: string
+  days_overdue: number
+}
+
 // 통합 알림 타입
 export interface Notification {
   id: string  // reference_id
@@ -615,5 +690,5 @@ export interface Notification {
   title: string
   message: string
   link?: string
-  data: OverdueCreditNotification | LongPendingBackorderNotification | LowStockNotification | OutOfStockNotification
+  data: OverdueCreditNotification | LongPendingBackorderNotification | LowStockNotification | OutOfStockNotification | OverdueSampleNotification
 }

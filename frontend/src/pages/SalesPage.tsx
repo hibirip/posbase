@@ -22,7 +22,7 @@ export default function SalesPage() {
   }
 
   return (
-    <div className="space-y-4 md:space-y-6 animate-fade-in">
+    <div className="space-y-3 md:space-y-4 animate-fade-in">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -35,26 +35,26 @@ export default function SalesPage() {
       </div>
 
       {/* Today Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-        <div className="glass-card p-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3">
+        <div className="glass-card p-3">
           <p className="data-label">오늘 매출</p>
           <p className="data-value data-value-lg mt-1 text-fg-primary">
             ₩{(stats?.totalSales || 0).toLocaleString()}
           </p>
         </div>
-        <div className="glass-card p-4">
+        <div className="glass-card p-3">
           <p className="data-label">현금 수령</p>
           <p className="data-value data-value-lg mt-1 text-success">
             ₩{(stats?.totalPaid || 0).toLocaleString()}
           </p>
         </div>
-        <div className="glass-card p-4">
+        <div className="glass-card p-3">
           <p className="data-label">외상</p>
           <p className="data-value data-value-lg mt-1 text-warning">
             ₩{(stats?.totalCredit || 0).toLocaleString()}
           </p>
         </div>
-        <div className="glass-card p-4">
+        <div className="glass-card p-3">
           <p className="data-label">판매 건수</p>
           <p className="data-value data-value-lg mt-1">
             {stats?.orderCount || 0}건
@@ -80,7 +80,7 @@ export default function SalesPage() {
           </Link>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-2">
           {sales?.map((sale) => (
             <SaleCard
               key={sale.id}
@@ -126,7 +126,7 @@ function SaleCard({ sale, onCancel, onReturn }: SaleCardProps) {
   return (
     <div className={`glass-card overflow-hidden ${isCancelled ? 'opacity-50' : ''}`}>
       <div
-        className="p-4 cursor-pointer hover:bg-bg-hover transition-colors"
+        className="p-3 cursor-pointer hover:bg-bg-hover transition-colors"
         onClick={() => setIsExpanded(!isExpanded)}
       >
         <div className="flex items-start justify-between">
@@ -180,9 +180,9 @@ function SaleCard({ sale, onCancel, onReturn }: SaleCardProps) {
 
       {/* Expanded Details */}
       {isExpanded && (
-        <div className="border-t border-border-subtle p-4 bg-bg-tertiary/50">
+        <div className="border-t border-border-subtle p-3 bg-bg-tertiary/50">
           {/* Items */}
-          <div className="space-y-2 mb-4">
+          <div className="space-y-1.5 mb-3">
             {sale.items.map((item) => (
               <div key={item.id} className="flex justify-between text-sm">
                 <span className="text-fg-secondary">
