@@ -81,21 +81,23 @@ export default function VariantMatrix({
     })
   }
 
-  // 미송 문의 수량 변경
-  const handleInquiryChange = (color: string, size: string, value: string) => {
+  // 미송 문의 수량 변경 (품절 상품용)
+  const handleInquiryQuantityChange = (color: string, size: string, delta: number) => {
     const key = `${color}-${size}`
-    const numValue = parseInt(value) || 0
-    if (numValue === 0) {
-      const { [key]: _, ...rest } = inquiryQuantities
-      setInquiryQuantities(rest)
-    } else {
-      setInquiryQuantities((prev) => ({ ...prev, [key]: Math.max(0, numValue) }))
-    }
+    setInquiryQuantities((prev) => {
+      const current = prev[key] || 0
+      const newValue = Math.max(0, current + delta)
+      if (newValue === 0) {
+        const { [key]: _, ...rest } = prev
+        return rest
+      }
+      return { ...prev, [key]: newValue }
+    })
   }
 
   // 선택된 항목 수
   const selectedCount = Object.values(quantities).reduce((sum, q) => sum + q, 0)
-  const inquiryCount = Object.keys(inquiryQuantities).length
+  const inquiryCount = Object.values(inquiryQuantities).reduce((sum, q) => sum + q, 0)
 
   // 장바구니에 담기
   const handleAddToCart = () => {
@@ -145,16 +147,6 @@ export default function VariantMatrix({
     setInquiryQuantities({})
   }
 
-  // 품절 옵션 있는지 확인
-  const hasOutOfStock = useMemo(() => {
-    return colors.some((color) =>
-      sizes.some((size) => {
-        const variant = getVariant(color, size)
-        return variant && variant.stock === 0
-      })
-    )
-  }, [colors, sizes, getVariant])
-
   return (
     <div className="space-y-4">
       {/* 매트릭스 테이블 */}
@@ -198,10 +190,38 @@ export default function VariantMatrix({
                   const quantity = quantities[key] || 0
 
                   if (isOutOfStock) {
-                    // 품절
+                    // 품절 - 미송 문의 가능
+                    const inquiryQty = inquiryQuantities[key] || 0
                     return (
-                      <td key={key} className="p-1 text-center">
-                        <span className="text-xs text-danger font-medium">품절</span>
+                      <td key={key} className="p-1">
+                        <div className="flex items-center justify-center gap-1">
+                          <button
+                            type="button"
+                            onClick={() => handleInquiryQuantityChange(color, size, -1)}
+                            disabled={inquiryQty === 0}
+                            className="w-6 h-6 flex items-center justify-center rounded-md bg-warning/20 text-warning hover:bg-warning/30 disabled:opacity-30 disabled:cursor-not-allowed"
+                          >
+                            <Minus size={14} />
+                          </button>
+                          <span
+                            className={`w-8 text-center text-sm font-mono ${
+                              inquiryQty > 0 ? 'text-warning font-bold' : 'text-fg-tertiary'
+                            }`}
+                          >
+                            {inquiryQty}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => handleInquiryQuantityChange(color, size, 1)}
+                            className="w-6 h-6 flex items-center justify-center rounded-md bg-warning/20 text-warning hover:bg-warning/30"
+                          >
+                            <Plus size={14} />
+                          </button>
+                        </div>
+                        {/* 품절 표시 */}
+                        <p className="text-[10px] text-warning text-center mt-0.5 font-medium">
+                          품절 (미송)
+                        </p>
                       </td>
                     )
                   }
@@ -245,56 +265,6 @@ export default function VariantMatrix({
           </tbody>
         </table>
       </div>
-
-      {/* 품절 상품 미송 문의 */}
-      {hasOutOfStock && onAddInquiry && (
-        <div className="border-t border-border-subtle pt-4">
-          <button
-            type="button"
-            className="w-full text-left p-3 bg-bg-tertiary/50 rounded-lg"
-            onClick={() => {
-              const el = document.getElementById('inquiry-section')
-              if (el) el.classList.toggle('hidden')
-            }}
-          >
-            <p className="text-sm font-medium text-fg-secondary">
-              💬 품절 상품 미송 문의
-            </p>
-            <p className="text-xs text-fg-tertiary mt-1">
-              품절된 상품의 수량을 입력하면 주문서에 포함됩니다
-            </p>
-          </button>
-
-          <div id="inquiry-section" className="hidden mt-3 space-y-2">
-            {colors.map((color) =>
-              sizes.map((size) => {
-                const variant = getVariant(color, size)
-                if (!variant || variant.stock > 0) return null
-
-                const key = `${color}-${size}`
-                const value = inquiryQuantities[key] || ''
-
-                return (
-                  <div key={key} className="flex items-center gap-2 text-sm">
-                    <span className="flex-1 text-fg-secondary">
-                      {color} {size}
-                    </span>
-                    <input
-                      type="number"
-                      min="0"
-                      placeholder="수량"
-                      value={value}
-                      onChange={(e) => handleInquiryChange(color, size, e.target.value)}
-                      className="w-20 px-2 py-1 text-center text-sm rounded-md border border-border-subtle bg-bg-tertiary text-fg-primary focus:ring-2 focus:ring-point/50"
-                    />
-                    <span className="text-fg-muted">개</span>
-                  </div>
-                )
-              })
-            )}
-          </div>
-        </div>
-      )}
 
       {/* 장바구니 담기 버튼 */}
       <div className="pt-2">
