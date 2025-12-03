@@ -33,27 +33,27 @@ export default function StatsPage() {
   }, [period, customStart, customEnd])
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-4 md:space-y-6 animate-fade-in">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-fg-primary">통계</h1>
-        <p className="text-fg-secondary mt-1">매출 및 입금 통계</p>
+        <h1 className="text-xl md:text-2xl font-bold text-fg-primary">통계</h1>
+        <p className="text-sm md:text-base text-fg-secondary mt-1">매출 및 입금 통계</p>
       </div>
 
       {/* Period Selector */}
-      <div className="glass-card p-4">
-        <div className="flex flex-wrap items-center gap-4">
-          <div className="flex gap-2">
+      <div className="glass-card p-3 md:p-4">
+        <div className="flex flex-wrap items-center gap-2 md:gap-4">
+          <div className="flex flex-wrap gap-2">
             {[
               { value: 'today', label: '오늘' },
-              { value: 'week', label: '최근 7일' },
-              { value: 'month', label: '최근 30일' },
-              { value: 'custom', label: '직접 선택' },
+              { value: 'week', label: '7일' },
+              { value: 'month', label: '30일' },
+              { value: 'custom', label: '직접' },
             ].map((p) => (
               <button
                 key={p.value}
                 onClick={() => setPeriod(p.value as typeof period)}
-                className={`px-4 py-2 text-sm rounded-md border transition-colors ${
+                className={`px-3 md:px-4 py-1.5 md:py-2 text-xs md:text-sm rounded-md border transition-colors ${
                   period === p.value
                     ? 'bg-bg-hover border-border-secondary text-fg-primary'
                     : 'bg-bg-tertiary border-border-subtle text-fg-tertiary hover:text-fg-secondary'
@@ -85,7 +85,7 @@ export default function StatsPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 border-b border-border-subtle">
+      <div className="flex gap-1 md:gap-2 border-b border-border-subtle">
         {[
           { value: 'overview', label: '개요' },
           { value: 'products', label: '상품별' },
@@ -94,7 +94,7 @@ export default function StatsPage() {
           <button
             key={tab.value}
             onClick={() => setActiveTab(tab.value as TabType)}
-            className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
+            className={`px-3 md:px-4 py-2 md:py-3 text-xs md:text-sm font-medium border-b-2 transition-colors ${
               activeTab === tab.value
                 ? 'border-fg-primary text-fg-primary'
                 : 'border-transparent text-fg-tertiary hover:text-fg-secondary'
@@ -136,11 +136,11 @@ function OverviewTab({ startDate, endDate }: { startDate: string; endDate: strin
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       {/* Sales Stats */}
-      <div className="glass-card p-6">
-        <h2 className="text-lg font-semibold text-fg-primary mb-4">판매 현황</h2>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="glass-card p-4 md:p-6">
+        <h2 className="text-base md:text-lg font-semibold text-fg-primary mb-3 md:mb-4">판매 현황</h2>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
           <div className="p-4 bg-bg-tertiary rounded-md">
             <p className="data-label">총 매출</p>
             <p className="data-value data-value-xl text-fg-primary mt-2">
@@ -169,9 +169,9 @@ function OverviewTab({ startDate, endDate }: { startDate: string; endDate: strin
       </div>
 
       {/* Payment Stats */}
-      <div className="glass-card p-6">
-        <h2 className="text-lg font-semibold text-fg-primary mb-4">입금 현황</h2>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="glass-card p-4 md:p-6">
+        <h2 className="text-base md:text-lg font-semibold text-fg-primary mb-3 md:mb-4">입금 현황</h2>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
           <div className="p-4 bg-bg-tertiary rounded-md">
             <p className="data-label">총 입금</p>
             <p className="data-value data-value-xl text-success mt-2">
@@ -226,8 +226,8 @@ function OverviewTab({ startDate, endDate }: { startDate: string; endDate: strin
 
       {/* Daily Stats */}
       {salesStats?.dailyStats && salesStats.dailyStats.length > 0 && (
-        <div className="glass-card p-6">
-          <h2 className="text-lg font-semibold text-fg-primary mb-4">일별 매출</h2>
+        <div className="glass-card p-4 md:p-6">
+          <h2 className="text-base md:text-lg font-semibold text-fg-primary mb-3 md:mb-4">일별 매출</h2>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
@@ -300,8 +300,8 @@ function ProductsTab({ startDate, endDate }: { startDate: string; endDate: strin
   const maxAmount = Math.max(...productStats.map(p => p.amount))
 
   return (
-    <div className="glass-card p-6">
-      <h2 className="text-lg font-semibold text-fg-primary mb-4">상품별 판매</h2>
+    <div className="glass-card p-4 md:p-6">
+      <h2 className="text-base md:text-lg font-semibold text-fg-primary mb-3 md:mb-4">상품별 판매</h2>
       <div className="space-y-4">
         {productStats.slice(0, 20).map((product, index) => (
           <div key={product.name} className="flex items-center gap-4">
@@ -354,8 +354,8 @@ function CustomersTab({ startDate, endDate }: { startDate: string; endDate: stri
   }
 
   return (
-    <div className="glass-card p-6">
-      <h2 className="text-lg font-semibold text-fg-primary mb-4">거래처별 판매</h2>
+    <div className="glass-card p-4 md:p-6">
+      <h2 className="text-base md:text-lg font-semibold text-fg-primary mb-3 md:mb-4">거래처별 판매</h2>
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>

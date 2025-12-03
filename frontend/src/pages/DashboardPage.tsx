@@ -23,17 +23,17 @@ export default function DashboardPage() {
   const pendingBackorderCount = pendingBackorders?.length || 0
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-4 md:space-y-6 animate-fade-in">
       {/* Welcome */}
       <div>
-        <h1 className="text-2xl font-bold text-fg-primary">
+        <h1 className="text-xl md:text-2xl font-bold text-fg-primary">
           안녕하세요, {profile?.shop_name || '매장'}님
         </h1>
-        <p className="text-fg-secondary mt-1">오늘도 좋은 하루 되세요!</p>
+        <p className="text-sm md:text-base text-fg-secondary mt-1">오늘도 좋은 하루 되세요!</p>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
         <StatCard
           label="오늘 매출"
           value={todayStats?.totalSales || 0}
@@ -60,7 +60,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
+      <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 md:gap-4">
         <QuickAction icon={ShoppingCart} label="판매 등록" to="/sales/new" />
         <QuickAction icon={Package} label="상품 등록" to="/products/new" />
         <QuickAction icon={Building2} label="거래처 등록" to="/customers/new" />
@@ -69,7 +69,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Recent Sales */}
-      <div className="glass-card p-5">
+      <div className="glass-card p-4 md:p-5">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-fg-primary">오늘 판매</h2>
           <Link to="/sales" className="text-sm text-fg-secondary hover:text-fg-primary transition-colors">
@@ -121,7 +121,7 @@ export default function DashboardPage() {
 
       {/* Unpaid Customers */}
       {customersWithBalance && customersWithBalance.length > 0 && (
-        <div className="glass-card p-5">
+        <div className="glass-card p-4 md:p-5">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-fg-primary">외상 거래처</h2>
             <Link to="/customers" className="text-sm text-fg-secondary hover:text-fg-primary transition-colors">
@@ -154,7 +154,7 @@ export default function DashboardPage() {
 
       {/* Pending Backorders */}
       {pendingBackorders && pendingBackorders.length > 0 && (
-        <div className="glass-card p-5">
+        <div className="glass-card p-4 md:p-5">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-fg-primary">
               대기 중인 미송

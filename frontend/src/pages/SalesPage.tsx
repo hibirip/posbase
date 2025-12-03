@@ -22,20 +22,20 @@ export default function SalesPage() {
   }
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-4 md:space-y-6 animate-fade-in">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-fg-primary">판매</h1>
-          <p className="text-fg-secondary mt-1">오늘의 판매 내역</p>
+          <h1 className="text-xl md:text-2xl font-bold text-fg-primary">판매</h1>
+          <p className="text-sm md:text-base text-fg-secondary mt-1">오늘의 판매 내역</p>
         </div>
-        <Link to="/sales/new" className="btn btn-primary">
+        <Link to="/sales/new" className="btn btn-primary text-sm md:text-base">
           + 판매 등록
         </Link>
       </div>
 
       {/* Today Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
         <div className="glass-card p-4">
           <p className="data-label">오늘 매출</p>
           <p className="data-value data-value-lg mt-1 text-fg-primary">

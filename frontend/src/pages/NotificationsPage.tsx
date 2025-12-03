@@ -43,12 +43,12 @@ export default function NotificationsPage() {
   }
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-4 md:space-y-6 animate-fade-in">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-fg-primary">알림</h1>
-          <p className="text-fg-secondary mt-1">
+          <h1 className="text-xl md:text-2xl font-bold text-fg-primary">알림</h1>
+          <p className="text-sm md:text-base text-fg-secondary mt-1">
             {counts?.total_count || 0}개의 알림이 있습니다
           </p>
         </div>
@@ -65,7 +65,7 @@ export default function NotificationsPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
         <div className="glass-card p-4">
           <div className="flex items-center gap-2 mb-2">
             <AlertTriangle size={16} strokeWidth={1.5} className="text-warning" />

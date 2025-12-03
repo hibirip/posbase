@@ -22,14 +22,14 @@ export default function PaymentsPage() {
   }, 0) || 0
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-4 md:space-y-6 animate-fade-in">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-fg-primary">입금 관리</h1>
-          <p className="text-fg-secondary mt-1">거래처 입금 및 환불 내역</p>
+          <h1 className="text-xl md:text-2xl font-bold text-fg-primary">입금 관리</h1>
+          <p className="text-sm md:text-base text-fg-secondary mt-1">거래처 입금 및 환불 내역</p>
         </div>
-        <button onClick={() => setShowModal(true)} className="btn btn-primary">
+        <button onClick={() => setShowModal(true)} className="btn btn-primary text-sm md:text-base">
           + 입금 등록
         </button>
       </div>

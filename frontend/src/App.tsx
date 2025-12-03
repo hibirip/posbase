@@ -21,6 +21,7 @@ import BackordersPage from '@/pages/BackordersPage'
 import ReturnsPage from '@/pages/ReturnsPage'
 import NotificationsPage from '@/pages/NotificationsPage'
 import StatsPage from '@/pages/StatsPage'
+import MorePage from '@/pages/MorePage'
 
 function App() {
   const { initialize, isInitialized } = useAuthStore()
@@ -75,6 +76,9 @@ function App() {
 
         {/* 통계 */}
         <Route path="/stats" element={<StatsPage />} />
+
+        {/* 더보기 (모바일 전용) */}
+        <Route path="/more" element={<MorePage />} />
       </Route>
     </Routes>
   )

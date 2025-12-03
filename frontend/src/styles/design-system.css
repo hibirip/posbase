@@ -731,6 +731,41 @@ body {
 
 
 /* ═══════════════════════════════════════════════════════════════════════════
+   SECTION 6.5: SAFE AREA (iOS)
+   ═══════════════════════════════════════════════════════════════════════════ */
+.safe-area-top {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.safe-area-left {
+  padding-left: env(safe-area-inset-left, 0px);
+}
+
+.safe-area-right {
+  padding-right: env(safe-area-inset-right, 0px);
+}
+
+.safe-area-x {
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+}
+
+.safe-area-y {
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Bottom Nav with Safe Area */
+.bottom-nav-safe {
+  padding-bottom: max(env(safe-area-inset-bottom, 0px), 8px);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
    SECTION 7: TAILWIND EXTENSIONS (Optional - if using Tailwind)
    ═══════════════════════════════════════════════════════════════════════════ */
 @theme {

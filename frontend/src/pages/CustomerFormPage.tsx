@@ -72,11 +72,11 @@ export default function CustomerFormPage() {
 
   return (
     <div className="max-w-2xl mx-auto animate-fade-in">
-      <h1 className="text-2xl font-bold text-fg-primary mb-6">
+      <h1 className="text-xl md:text-2xl font-bold text-fg-primary mb-4 md:mb-6">
         {isEdit ? '거래처 수정' : '거래처 등록'}
       </h1>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
         {error && (
           <div className="p-3 rounded-lg bg-danger/10 border border-danger/20 text-danger text-sm">
             {error}
@@ -84,7 +84,7 @@ export default function CustomerFormPage() {
         )}
 
         {/* 기본 정보 */}
-        <div className="glass-card p-5 space-y-4">
+        <div className="glass-card p-4 md:p-5 space-y-4">
           <h2 className="font-semibold text-fg-primary">기본 정보</h2>
 
           <div>
@@ -99,7 +99,7 @@ export default function CustomerFormPage() {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="data-label block mb-1.5">담당자명</label>
               <input
@@ -127,7 +127,7 @@ export default function CustomerFormPage() {
         </div>
 
         {/* 추가 정보 */}
-        <div className="glass-card p-5 space-y-4">
+        <div className="glass-card p-4 md:p-5 space-y-4">
           <h2 className="font-semibold text-fg-primary">추가 정보</h2>
 
           <div>
@@ -156,7 +156,7 @@ export default function CustomerFormPage() {
         </div>
 
         {/* 메모 */}
-        <div className="glass-card p-5 space-y-4">
+        <div className="glass-card p-4 md:p-5 space-y-4">
           <h2 className="font-semibold text-fg-primary">메모</h2>
           <textarea
             name="memo"
@@ -169,7 +169,7 @@ export default function CustomerFormPage() {
 
         {/* 외상 정보 (수정 모드에서만 표시) */}
         {isEdit && customer && customer.balance > 0 && (
-          <div className="glass-card p-5">
+          <div className="glass-card p-4 md:p-5">
             <h2 className="font-semibold text-fg-primary mb-3">외상 정보</h2>
             <div className="flex items-center justify-between">
               <span className="text-fg-secondary">현재 외상 잔액</span>

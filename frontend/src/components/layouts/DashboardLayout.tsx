@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '@/stores/authStore'
 import { useNotificationCounts } from '@/hooks/useNotifications'
+import BottomNav from '@/components/BottomNav'
 import {
   Home,
   ShoppingCart,
@@ -41,9 +42,9 @@ export default function DashboardLayout() {
 
   return (
     <div className="min-h-screen bg-bg-primary flex">
-      {/* Sidebar */}
+      {/* Sidebar - Desktop Only */}
       <aside
-        className={`fixed left-0 top-0 h-full bg-bg-secondary border-r border-border-subtle z-40 transition-all duration-300 ${
+        className={`fixed left-0 top-0 h-full bg-bg-secondary border-r border-border-subtle z-40 transition-all duration-300 hidden md:block ${
           isSidebarOpen ? 'w-60' : 'w-16'
         }`}
       >
@@ -123,11 +124,30 @@ export default function DashboardLayout() {
       {/* Main Content */}
       <main
         className={`flex-1 transition-all duration-300 ${
-          isSidebarOpen ? 'ml-60' : 'ml-16'
+          isSidebarOpen ? 'md:ml-60' : 'md:ml-16'
         }`}
       >
-        {/* Header */}
-        <header className="h-14 bg-bg-secondary/80 backdrop-blur-sm border-b border-border-subtle sticky top-0 z-30">
+        {/* Header - Mobile */}
+        <header className="h-14 bg-bg-secondary/95 backdrop-blur-lg border-b border-border-subtle sticky top-0 z-30 md:hidden">
+          <div className="h-full px-4 flex items-center justify-between">
+            <Link to="/" className="text-lg font-bold text-fg-primary">
+              POS<span className="text-point">BASE</span>
+            </Link>
+
+            <Link
+              to="/notifications"
+              className="relative p-2 text-fg-muted hover:text-fg-secondary rounded-md transition-colors"
+            >
+              <Bell size={20} strokeWidth={1.5} />
+              {(notificationCounts?.total_count || 0) > 0 && (
+                <span className="absolute top-1 right-1 w-2 h-2 bg-danger rounded-full" />
+              )}
+            </Link>
+          </div>
+        </header>
+
+        {/* Header - Desktop */}
+        <header className="h-14 bg-bg-secondary/80 backdrop-blur-sm border-b border-border-subtle sticky top-0 z-30 hidden md:block">
           <div className="h-full px-6 flex items-center justify-between">
             <div className="flex items-center gap-4">
               {/* 빈 공간 또는 브레드크럼 */}
@@ -162,10 +182,13 @@ export default function DashboardLayout() {
         </header>
 
         {/* Page Content */}
-        <div className="p-6">
+        <div className="p-4 md:p-6 pb-24 md:pb-6">
           <Outlet />
         </div>
       </main>
+
+      {/* Bottom Navigation - Mobile Only */}
+      <BottomNav />
     </div>
   )
 }

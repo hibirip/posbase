@@ -35,15 +35,15 @@ export default function ReturnsPage() {
   }
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-4 md:space-y-6 animate-fade-in">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-fg-primary">반품 관리</h1>
-        <p className="text-fg-secondary mt-1">판매된 상품의 반품 처리</p>
+        <h1 className="text-xl md:text-2xl font-bold text-fg-primary">반품 관리</h1>
+        <p className="text-sm md:text-base text-fg-secondary mt-1">판매된 상품의 반품 처리</p>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-3 gap-2 md:gap-4">
         <div className="glass-card p-4">
           <p className="data-label">대기 중</p>
           <p className="data-value data-value-lg mt-1 text-warning">
@@ -65,8 +65,8 @@ export default function ReturnsPage() {
       </div>
 
       {/* Filter */}
-      <div className="glass-card p-4">
-        <div className="flex gap-2">
+      <div className="glass-card p-3 md:p-4">
+        <div className="flex flex-wrap gap-2">
           {[
             { value: '', label: '전체' },
             { value: 'pending', label: '대기 중' },
@@ -76,7 +76,7 @@ export default function ReturnsPage() {
             <button
               key={option.value}
               onClick={() => setStatusFilter(option.value as ReturnStatus | '')}
-              className={`px-4 py-2 text-sm rounded-md border transition-colors ${
+              className={`px-3 md:px-4 py-1.5 md:py-2 text-xs md:text-sm rounded-md border transition-colors ${
                 statusFilter === option.value
                   ? 'bg-bg-hover border-border-secondary text-fg-primary'
                   : 'bg-bg-tertiary border-border-subtle text-fg-tertiary hover:text-fg-secondary'

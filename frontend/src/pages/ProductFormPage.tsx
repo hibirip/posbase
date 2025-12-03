@@ -143,11 +143,11 @@ export default function ProductFormPage() {
 
   return (
     <div className="max-w-2xl mx-auto animate-fade-in">
-      <h1 className="text-2xl font-bold text-fg-primary mb-6">
+      <h1 className="text-xl md:text-2xl font-bold text-fg-primary mb-4 md:mb-6">
         {isEdit ? '상품 수정' : '상품 등록'}
       </h1>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
         {error && (
           <div className="p-3 rounded-lg bg-danger/10 border border-danger/20 text-danger text-sm">
             {error}
@@ -155,10 +155,10 @@ export default function ProductFormPage() {
         )}
 
         {/* 기본 정보 */}
-        <div className="glass-card p-5 space-y-4">
+        <div className="glass-card p-4 md:p-5 space-y-4">
           <h2 className="font-semibold text-fg-primary">기본 정보</h2>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="col-span-2">
               <label className="data-label block mb-1.5">상품명 *</label>
               <input
@@ -198,10 +198,10 @@ export default function ProductFormPage() {
         </div>
 
         {/* 가격 */}
-        <div className="glass-card p-5 space-y-4">
+        <div className="glass-card p-4 md:p-5 space-y-4">
           <h2 className="font-semibold text-fg-primary">가격</h2>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="data-label block mb-1.5">원가 (입고가)</label>
               <div className="relative">
@@ -242,7 +242,7 @@ export default function ProductFormPage() {
         </div>
 
         {/* 옵션 (칼라/사이즈) */}
-        <div className="glass-card p-5 space-y-4">
+        <div className="glass-card p-4 md:p-5 space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="font-semibold text-fg-primary">옵션 (칼라/사이즈)</h2>
             <button
@@ -256,24 +256,24 @@ export default function ProductFormPage() {
 
           <div className="space-y-3">
             {variants.map((variant, index) => (
-              <div key={index} className="flex items-center gap-3">
+              <div key={index} className="flex items-center gap-2 md:gap-3">
                 <input
                   type="text"
-                  className="input flex-1"
+                  className="input flex-1 min-w-0"
                   placeholder="칼라"
                   value={variant.color}
                   onChange={(e) => handleVariantChange(index, 'color', e.target.value)}
                 />
                 <input
                   type="text"
-                  className="input w-24"
+                  className="input w-16 md:w-24"
                   placeholder="사이즈"
                   value={variant.size}
                   onChange={(e) => handleVariantChange(index, 'size', e.target.value)}
                 />
                 <input
                   type="number"
-                  className="input w-24"
+                  className="input w-16 md:w-24"
                   placeholder="재고"
                   value={variant.stock || ''}
                   onChange={(e) => handleVariantChange(index, 'stock', e.target.value)}
@@ -281,7 +281,7 @@ export default function ProductFormPage() {
                 <button
                   type="button"
                   onClick={() => removeVariantRow(index)}
-                  className="btn btn-ghost btn-sm text-danger"
+                  className="btn btn-ghost btn-sm text-danger flex-shrink-0"
                   disabled={variants.length === 1}
                 >
                   ✕
@@ -292,7 +292,7 @@ export default function ProductFormPage() {
         </div>
 
         {/* 메모 */}
-        <div className="glass-card p-5 space-y-4">
+        <div className="glass-card p-4 md:p-5 space-y-4">
           <h2 className="font-semibold text-fg-primary">메모</h2>
           <textarea
             name="memo"

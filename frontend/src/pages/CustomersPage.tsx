@@ -33,22 +33,22 @@ export default function CustomersPage() {
   }
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-4 md:space-y-6 animate-fade-in">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-fg-primary">거래처 관리</h1>
-          <p className="text-fg-secondary mt-1">
+          <h1 className="text-xl md:text-2xl font-bold text-fg-primary">거래처 관리</h1>
+          <p className="text-sm md:text-base text-fg-secondary mt-1">
             총 {customers?.length || 0}개 거래처
           </p>
         </div>
-        <Link to="/customers/new" className="btn btn-primary">
+        <Link to="/customers/new" className="btn btn-primary text-sm md:text-base">
           + 거래처 등록
         </Link>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-3 md:gap-4">
         <div className="glass-card p-4">
           <p className="data-label">외상 보유 거래처</p>
           <p className="data-value data-value-lg mt-1">{customersWithBalance}개</p>
