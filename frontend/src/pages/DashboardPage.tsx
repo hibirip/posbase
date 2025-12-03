@@ -1,8 +1,11 @@
+import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuthStore } from '@/stores/authStore'
 import { useTodayStats, useTodaySales } from '@/hooks/useSales'
 import { useCustomersWithBalance } from '@/hooks/useCustomers'
 import { usePendingBackorders } from '@/hooks/useBackorders'
+import { useSalesStats } from '@/hooks/useStats'
+import { ChartCard, BarChart, LineChart } from '@/components/charts'
 import {
   ShoppingCart,
   Package,
@@ -19,8 +22,32 @@ export default function DashboardPage() {
   const { data: customersWithBalance } = useCustomersWithBalance()
   const { data: pendingBackorders } = usePendingBackorders()
 
+  // 최근 7일 매출 통계
+  const { startDate, endDate } = useMemo(() => {
+    const today = new Date()
+    const weekAgo = new Date(today)
+    weekAgo.setDate(weekAgo.getDate() - 7)
+    return {
+      startDate: weekAgo.toISOString().split('T')[0],
+      endDate: today.toISOString().split('T')[0],
+    }
+  }, [])
+  const { data: weeklyStats } = useSalesStats(startDate, endDate)
+
   const totalUnpaid = customersWithBalance?.reduce((sum, c) => sum + c.balance, 0) || 0
   const pendingBackorderCount = pendingBackorders?.length || 0
+
+  // 주간 매출 차트 데이터
+  const weeklyChartData = weeklyStats?.dailyStats?.map(day => ({
+    name: new Date(day.date).toLocaleDateString('ko-KR', { weekday: 'short' }),
+    value: day.totalSales,
+  })) || []
+
+  // 주간 외상 추이 차트 데이터
+  const weeklyCreditData = weeklyStats?.dailyStats?.map(day => ({
+    name: new Date(day.date).toLocaleDateString('ko-KR', { weekday: 'short' }),
+    value: day.totalCredit,
+  })) || []
 
   return (
     <div className="space-y-4 md:space-y-6 animate-fade-in">
@@ -67,6 +94,18 @@ export default function DashboardPage() {
         <QuickAction icon={Truck} label="미송 관리" to="/backorders" badge={pendingBackorderCount > 0 ? pendingBackorderCount : undefined} />
         <QuickAction icon={BarChart3} label="통계 보기" to="/stats" />
       </div>
+
+      {/* Mini Charts */}
+      {weeklyChartData.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+          <ChartCard title="주간 매출 추이" subtitle="최근 7일" size="mini">
+            <BarChart data={weeklyChartData} size="mini" color="primary" />
+          </ChartCard>
+          <ChartCard title="주간 외상 발생" subtitle="최근 7일" size="mini">
+            <LineChart data={weeklyCreditData} size="mini" color="warning" />
+          </ChartCard>
+        </div>
+      )}
 
       {/* Recent Sales */}
       <div className="glass-card p-4 md:p-5">

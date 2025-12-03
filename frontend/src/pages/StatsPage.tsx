@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { useSalesStats, useProductStats, useCustomerStats, usePaymentStats } from '@/hooks/useStats'
+import { ChartCard, BarChart, DonutChart, HorizontalBarChart } from '@/components/charts'
 
 type TabType = 'overview' | 'products' | 'customers'
 
@@ -117,55 +118,142 @@ export default function StatsPage() {
 function OverviewTab({ startDate, endDate }: { startDate: string; endDate: string }) {
   const { data: salesStats, isLoading: salesLoading } = useSalesStats(startDate, endDate)
   const { data: paymentStats, isLoading: paymentLoading } = usePaymentStats(startDate, endDate)
+  const { data: productStats, isLoading: productLoading } = useProductStats(startDate, endDate)
+  const { data: customerStats, isLoading: customerLoading } = useCustomerStats(startDate, endDate)
 
-  if (salesLoading || paymentLoading) {
+  const isLoading = salesLoading || paymentLoading || productLoading || customerLoading
+
+  if (isLoading) {
     return (
       <div className="space-y-4">
-        {[1, 2].map(i => (
-          <div key={i} className="glass-card p-6">
-            <div className="skeleton skeleton-text w-1/4 mb-4" />
-            <div className="grid grid-cols-4 gap-4">
-              {[1, 2, 3, 4].map(j => (
-                <div key={j} className="skeleton skeleton-text h-16" />
-              ))}
-            </div>
+        <div className="glass-card p-6">
+          <div className="skeleton skeleton-text w-1/4 mb-4" />
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[1, 2, 3, 4].map(j => (
+              <div key={j} className="skeleton skeleton-text h-16" />
+            ))}
           </div>
-        ))}
+        </div>
+        <div className="skeleton skeleton-card h-64" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {[1, 2, 3].map(j => (
+            <div key={j} className="skeleton skeleton-card h-48" />
+          ))}
+        </div>
       </div>
     )
   }
 
+  // 일별 매출 차트 데이터
+  const dailyChartData = salesStats?.dailyStats?.slice(-14).map(day => ({
+    name: new Date(day.date).toLocaleDateString('ko-KR', { month: 'numeric', day: 'numeric' }),
+    value: day.totalSales,
+  })) || []
+
+  // 결제 방식 도넛 차트 데이터
+  const totalPaid = salesStats?.totals.totalPaid || 0
+  const totalCredit = salesStats?.totals.totalCredit || 0
+  const paymentMethodData = [
+    { name: '현금 수령', value: totalPaid, color: '#00C805' },
+    { name: '외상', value: totalCredit, color: '#FF9500' },
+  ].filter(d => d.value > 0)
+
+  // TOP 5 거래처 데이터
+  const top5Customers = customerStats?.slice(0, 5).map(c => ({
+    name: c.name,
+    value: c.totalSales,
+    subValue: c.orderCount,
+  })) || []
+
+  // TOP 5 상품 데이터
+  const top5Products = productStats?.slice(0, 5).map(p => ({
+    name: p.name,
+    value: p.amount,
+    subValue: p.quantity,
+  })) || []
+
+  // 외상 비율 계산
+  const totalSales = salesStats?.totals.totalSales || 0
+  const creditRatio = totalSales > 0 ? Math.round((totalCredit / totalSales) * 100) : 0
+
   return (
     <div className="space-y-4 md:space-y-6">
-      {/* Sales Stats */}
-      <div className="glass-card p-4 md:p-6">
-        <h2 className="text-base md:text-lg font-semibold text-fg-primary mb-3 md:mb-4">판매 현황</h2>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-          <div className="p-4 bg-bg-tertiary rounded-md">
-            <p className="data-label">총 매출</p>
-            <p className="data-value data-value-xl text-fg-primary mt-2">
-              ₩{(salesStats?.totals.totalSales || 0).toLocaleString()}
-            </p>
-          </div>
-          <div className="p-4 bg-bg-tertiary rounded-md">
-            <p className="data-label">현금 수령</p>
-            <p className="data-value data-value-xl text-success mt-2">
-              ₩{(salesStats?.totals.totalPaid || 0).toLocaleString()}
-            </p>
-          </div>
-          <div className="p-4 bg-bg-tertiary rounded-md">
-            <p className="data-label">외상</p>
-            <p className="data-value data-value-xl text-warning mt-2">
-              ₩{(salesStats?.totals.totalCredit || 0).toLocaleString()}
-            </p>
-          </div>
-          <div className="p-4 bg-bg-tertiary rounded-md">
-            <p className="data-label">판매 건수</p>
-            <p className="data-value data-value-xl mt-2">
-              {salesStats?.totals.orderCount || 0}건
-            </p>
-          </div>
+      {/* Summary Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+        <div className="glass-card p-4">
+          <p className="data-label">총 매출</p>
+          <p className="data-value data-value-lg md:data-value-xl text-fg-primary mt-2">
+            ₩{totalSales.toLocaleString()}
+          </p>
         </div>
+        <div className="glass-card p-4">
+          <p className="data-label">현금 수령</p>
+          <p className="data-value data-value-lg md:data-value-xl text-success mt-2">
+            ₩{totalPaid.toLocaleString()}
+          </p>
+        </div>
+        <div className="glass-card p-4">
+          <p className="data-label">외상 발생</p>
+          <p className="data-value data-value-lg md:data-value-xl text-warning mt-2">
+            ₩{totalCredit.toLocaleString()}
+          </p>
+        </div>
+        <div className="glass-card p-4">
+          <p className="data-label">판매 건수</p>
+          <p className="data-value data-value-lg md:data-value-xl text-fg-primary mt-2">
+            {salesStats?.totals.orderCount || 0}건
+          </p>
+        </div>
+      </div>
+
+      {/* Daily Sales Chart */}
+      {dailyChartData.length > 0 && (
+        <ChartCard title="일별 매출 추이" subtitle="최근 14일">
+          <BarChart data={dailyChartData} color="primary" />
+        </ChartCard>
+      )}
+
+      {/* Charts Row */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+        {/* Payment Method Donut */}
+        <ChartCard
+          title="결제 방식"
+          subtitle={`외상 비율 ${creditRatio}%`}
+        >
+          {paymentMethodData.length > 0 ? (
+            <DonutChart
+              data={paymentMethodData}
+              centerValue={`${creditRatio}%`}
+              centerLabel="외상 비율"
+            />
+          ) : (
+            <div className="h-[200px] flex items-center justify-center text-fg-tertiary text-sm">
+              데이터 없음
+            </div>
+          )}
+        </ChartCard>
+
+        {/* Top 5 Customers */}
+        <ChartCard title="거래처 TOP 5" subtitle="매출 기준">
+          {top5Customers.length > 0 ? (
+            <HorizontalBarChart data={top5Customers} color="primary" />
+          ) : (
+            <div className="h-[200px] flex items-center justify-center text-fg-tertiary text-sm">
+              데이터 없음
+            </div>
+          )}
+        </ChartCard>
+
+        {/* Top 5 Products */}
+        <ChartCard title="상품 TOP 5" subtitle="매출 기준">
+          {top5Products.length > 0 ? (
+            <HorizontalBarChart data={top5Products} color="success" />
+          ) : (
+            <div className="h-[200px] flex items-center justify-center text-fg-tertiary text-sm">
+              데이터 없음
+            </div>
+          )}
+        </ChartCard>
       </div>
 
       {/* Payment Stats */}
@@ -174,25 +262,25 @@ function OverviewTab({ startDate, endDate }: { startDate: string; endDate: strin
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
           <div className="p-4 bg-bg-tertiary rounded-md">
             <p className="data-label">총 입금</p>
-            <p className="data-value data-value-xl text-success mt-2">
+            <p className="data-value data-value-lg text-success mt-2">
               ₩{(paymentStats?.totalDeposits || 0).toLocaleString()}
             </p>
           </div>
           <div className="p-4 bg-bg-tertiary rounded-md">
             <p className="data-label">총 환불</p>
-            <p className="data-value data-value-xl text-danger mt-2">
+            <p className="data-value data-value-lg text-danger mt-2">
               ₩{(paymentStats?.totalRefunds || 0).toLocaleString()}
             </p>
           </div>
           <div className="p-4 bg-bg-tertiary rounded-md">
             <p className="data-label">입금 건수</p>
-            <p className="data-value data-value-xl mt-2">
+            <p className="data-value data-value-lg mt-2">
               {paymentStats?.depositCount || 0}건
             </p>
           </div>
           <div className="p-4 bg-bg-tertiary rounded-md">
             <p className="data-label">환불 건수</p>
-            <p className="data-value data-value-xl mt-2">
+            <p className="data-value data-value-lg mt-2">
               {paymentStats?.refundCount || 0}건
             </p>
           </div>
@@ -201,7 +289,7 @@ function OverviewTab({ startDate, endDate }: { startDate: string; endDate: strin
         {/* Payment by Method */}
         <div className="mt-4 pt-4 border-t border-border-subtle">
           <p className="text-sm text-fg-secondary mb-3">결제 방법별 입금</p>
-          <div className="flex gap-6">
+          <div className="flex flex-wrap gap-4 md:gap-6">
             <div>
               <span className="text-fg-tertiary text-sm">현금</span>
               <p className="font-mono font-semibold text-fg-primary">
@@ -224,41 +312,41 @@ function OverviewTab({ startDate, endDate }: { startDate: string; endDate: strin
         </div>
       </div>
 
-      {/* Daily Stats */}
+      {/* Daily Stats Table */}
       {salesStats?.dailyStats && salesStats.dailyStats.length > 0 && (
         <div className="glass-card p-4 md:p-6">
-          <h2 className="text-base md:text-lg font-semibold text-fg-primary mb-3 md:mb-4">일별 매출</h2>
+          <h2 className="text-base md:text-lg font-semibold text-fg-primary mb-3 md:mb-4">일별 매출 상세</h2>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="text-left text-sm text-fg-tertiary border-b border-border-subtle">
+                <tr className="text-left text-xs md:text-sm text-fg-tertiary border-b border-border-subtle">
                   <th className="pb-3 font-medium">날짜</th>
                   <th className="pb-3 font-medium text-right">매출</th>
-                  <th className="pb-3 font-medium text-right">현금</th>
-                  <th className="pb-3 font-medium text-right">외상</th>
+                  <th className="pb-3 font-medium text-right hidden sm:table-cell">현금</th>
+                  <th className="pb-3 font-medium text-right hidden sm:table-cell">외상</th>
                   <th className="pb-3 font-medium text-right">건수</th>
                 </tr>
               </thead>
               <tbody>
                 {salesStats.dailyStats.map((day) => (
                   <tr key={day.date} className="border-b border-border-subtle/50">
-                    <td className="py-3 text-fg-primary">
+                    <td className="py-3 text-fg-primary text-sm">
                       {new Date(day.date).toLocaleDateString('ko-KR', {
                         month: 'short',
                         day: 'numeric',
                         weekday: 'short',
                       })}
                     </td>
-                    <td className="py-3 text-right font-mono text-fg-primary">
+                    <td className="py-3 text-right font-mono text-sm text-fg-primary">
                       ₩{day.totalSales.toLocaleString()}
                     </td>
-                    <td className="py-3 text-right font-mono text-success">
+                    <td className="py-3 text-right font-mono text-sm text-success hidden sm:table-cell">
                       ₩{day.totalPaid.toLocaleString()}
                     </td>
-                    <td className="py-3 text-right font-mono text-warning">
+                    <td className="py-3 text-right font-mono text-sm text-warning hidden sm:table-cell">
                       ₩{day.totalCredit.toLocaleString()}
                     </td>
-                    <td className="py-3 text-right text-fg-secondary">
+                    <td className="py-3 text-right text-fg-secondary text-sm">
                       {day.orderCount}건
                     </td>
                   </tr>
@@ -278,12 +366,15 @@ function ProductsTab({ startDate, endDate }: { startDate: string; endDate: strin
 
   if (isLoading) {
     return (
-      <div className="glass-card p-6">
-        <div className="skeleton skeleton-text w-1/4 mb-4" />
-        <div className="space-y-3">
-          {[1, 2, 3, 4, 5].map(i => (
-            <div key={i} className="skeleton skeleton-text h-12" />
-          ))}
+      <div className="space-y-4">
+        <div className="skeleton skeleton-card h-64" />
+        <div className="glass-card p-6">
+          <div className="skeleton skeleton-text w-1/4 mb-4" />
+          <div className="space-y-3">
+            {[1, 2, 3, 4, 5].map(i => (
+              <div key={i} className="skeleton skeleton-text h-12" />
+            ))}
+          </div>
         </div>
       </div>
     )
@@ -297,32 +388,51 @@ function ProductsTab({ startDate, endDate }: { startDate: string; endDate: strin
     )
   }
 
-  const maxAmount = Math.max(...productStats.map(p => p.amount))
+  // 상품별 차트 데이터
+  const chartData = productStats.slice(0, 10).map(p => ({
+    name: p.name,
+    value: p.amount,
+    subValue: p.quantity,
+  }))
 
   return (
-    <div className="glass-card p-4 md:p-6">
-      <h2 className="text-base md:text-lg font-semibold text-fg-primary mb-3 md:mb-4">상품별 판매</h2>
-      <div className="space-y-4">
-        {productStats.slice(0, 20).map((product, index) => (
-          <div key={product.name} className="flex items-center gap-4">
-            <span className="w-6 text-sm text-fg-tertiary text-right">{index + 1}</span>
-            <div className="flex-1">
-              <div className="flex items-center justify-between mb-1">
-                <span className="text-fg-primary font-medium">{product.name}</span>
-                <span className="font-mono text-fg-primary">₩{product.amount.toLocaleString()}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="flex-1 h-2 bg-bg-tertiary rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-fg-secondary rounded-full transition-all"
-                    style={{ width: `${(product.amount / maxAmount) * 100}%` }}
-                  />
+    <div className="space-y-4 md:space-y-6">
+      {/* Chart */}
+      <ChartCard title="상품별 매출 TOP 10">
+        <HorizontalBarChart data={chartData} color="primary" maxItems={10} />
+      </ChartCard>
+
+      {/* Full List */}
+      <div className="glass-card p-4 md:p-6">
+        <h2 className="text-base md:text-lg font-semibold text-fg-primary mb-3 md:mb-4">
+          전체 상품 ({productStats.length}개)
+        </h2>
+        <div className="space-y-3">
+          {productStats.map((product, index) => {
+            const maxAmount = productStats[0].amount
+            const percentage = maxAmount > 0 ? (product.amount / maxAmount) * 100 : 0
+            return (
+              <div key={product.name} className="flex items-center gap-3 md:gap-4">
+                <span className="w-6 text-sm text-fg-tertiary text-right">{index + 1}</span>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-fg-primary font-medium text-sm truncate">{product.name}</span>
+                    <span className="font-mono text-fg-primary text-sm ml-2">₩{product.amount.toLocaleString()}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="flex-1 h-1.5 bg-bg-tertiary rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-point rounded-full transition-all"
+                        style={{ width: `${percentage}%` }}
+                      />
+                    </div>
+                    <span className="text-xs text-fg-tertiary w-12 text-right">{product.quantity}개</span>
+                  </div>
                 </div>
-                <span className="text-xs text-fg-tertiary w-12 text-right">{product.quantity}개</span>
               </div>
-            </div>
-          </div>
-        ))}
+            )
+          })}
+        </div>
       </div>
     </div>
   )
@@ -334,12 +444,15 @@ function CustomersTab({ startDate, endDate }: { startDate: string; endDate: stri
 
   if (isLoading) {
     return (
-      <div className="glass-card p-6">
-        <div className="skeleton skeleton-text w-1/4 mb-4" />
-        <div className="space-y-3">
-          {[1, 2, 3, 4, 5].map(i => (
-            <div key={i} className="skeleton skeleton-text h-16" />
-          ))}
+      <div className="space-y-4">
+        <div className="skeleton skeleton-card h-64" />
+        <div className="glass-card p-6">
+          <div className="skeleton skeleton-text w-1/4 mb-4" />
+          <div className="space-y-3">
+            {[1, 2, 3, 4, 5].map(i => (
+              <div key={i} className="skeleton skeleton-text h-16" />
+            ))}
+          </div>
         </div>
       </div>
     )
@@ -353,42 +466,59 @@ function CustomersTab({ startDate, endDate }: { startDate: string; endDate: stri
     )
   }
 
+  // 거래처별 차트 데이터
+  const chartData = customerStats.slice(0, 10).map(c => ({
+    name: c.name,
+    value: c.totalSales,
+    subValue: c.orderCount,
+  }))
+
   return (
-    <div className="glass-card p-4 md:p-6">
-      <h2 className="text-base md:text-lg font-semibold text-fg-primary mb-3 md:mb-4">거래처별 판매</h2>
-      <div className="overflow-x-auto">
-        <table className="w-full">
-          <thead>
-            <tr className="text-left text-sm text-fg-tertiary border-b border-border-subtle">
-              <th className="pb-3 font-medium">#</th>
-              <th className="pb-3 font-medium">거래처</th>
-              <th className="pb-3 font-medium text-right">총 매출</th>
-              <th className="pb-3 font-medium text-right">현금</th>
-              <th className="pb-3 font-medium text-right">외상</th>
-              <th className="pb-3 font-medium text-right">건수</th>
-            </tr>
-          </thead>
-          <tbody>
-            {customerStats.map((customer, index) => (
-              <tr key={customer.id} className="border-b border-border-subtle/50">
-                <td className="py-3 text-fg-tertiary">{index + 1}</td>
-                <td className="py-3 text-fg-primary font-medium">{customer.name}</td>
-                <td className="py-3 text-right font-mono text-fg-primary">
-                  ₩{customer.totalSales.toLocaleString()}
-                </td>
-                <td className="py-3 text-right font-mono text-success">
-                  ₩{customer.totalPaid.toLocaleString()}
-                </td>
-                <td className="py-3 text-right font-mono text-warning">
-                  ₩{customer.totalCredit.toLocaleString()}
-                </td>
-                <td className="py-3 text-right text-fg-secondary">
-                  {customer.orderCount}건
-                </td>
+    <div className="space-y-4 md:space-y-6">
+      {/* Chart */}
+      <ChartCard title="거래처별 매출 TOP 10">
+        <HorizontalBarChart data={chartData} color="primary" maxItems={10} />
+      </ChartCard>
+
+      {/* Table */}
+      <div className="glass-card p-4 md:p-6">
+        <h2 className="text-base md:text-lg font-semibold text-fg-primary mb-3 md:mb-4">
+          전체 거래처 ({customerStats.length}곳)
+        </h2>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="text-left text-xs md:text-sm text-fg-tertiary border-b border-border-subtle">
+                <th className="pb-3 font-medium">#</th>
+                <th className="pb-3 font-medium">거래처</th>
+                <th className="pb-3 font-medium text-right">총 매출</th>
+                <th className="pb-3 font-medium text-right hidden sm:table-cell">현금</th>
+                <th className="pb-3 font-medium text-right hidden sm:table-cell">외상</th>
+                <th className="pb-3 font-medium text-right">건수</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {customerStats.map((customer, index) => (
+                <tr key={customer.id} className="border-b border-border-subtle/50">
+                  <td className="py-3 text-fg-tertiary text-sm">{index + 1}</td>
+                  <td className="py-3 text-fg-primary font-medium text-sm">{customer.name}</td>
+                  <td className="py-3 text-right font-mono text-fg-primary text-sm">
+                    ₩{customer.totalSales.toLocaleString()}
+                  </td>
+                  <td className="py-3 text-right font-mono text-success text-sm hidden sm:table-cell">
+                    ₩{customer.totalPaid.toLocaleString()}
+                  </td>
+                  <td className="py-3 text-right font-mono text-warning text-sm hidden sm:table-cell">
+                    ₩{customer.totalCredit.toLocaleString()}
+                  </td>
+                  <td className="py-3 text-right text-fg-secondary text-sm">
+                    {customer.orderCount}건
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   )
