@@ -38,7 +38,7 @@ export default function LoginPage() {
         {/* Logo */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-fg-primary">POS<span className="text-point">BASE</span></h1>
-          <p className="text-fg-secondary mt-2">동대문 의류 도매 POS</p>
+          <p className="text-fg-secondary mt-2">스마트한 도매 관리</p>
         </div>
 
         {/* Form */}

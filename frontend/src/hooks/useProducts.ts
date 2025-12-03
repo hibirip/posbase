@@ -53,6 +53,7 @@ interface CreateProductInput {
   cost_price: number
   sale_price: number
   memo?: string
+  image_url?: string
   variants: { color: string; size: string; stock: number }[]
 }
 
@@ -75,6 +76,7 @@ export function useCreateProduct() {
           cost_price: input.cost_price,
           sale_price: input.sale_price,
           memo: input.memo,
+          image_url: input.image_url,
         })
         .select()
         .single()
@@ -114,6 +116,7 @@ interface UpdateProductInput {
   cost_price?: number
   sale_price?: number
   memo?: string
+  image_url?: string
 }
 
 export function useUpdateProduct() {

@@ -11,6 +11,7 @@ import {
   Bell,
   LogOut,
   ChevronRight,
+  Store,
 } from 'lucide-react'
 
 const menuItems = [
@@ -19,6 +20,7 @@ const menuItems = [
   { path: '/backorders', label: '미송 관리', icon: Truck, description: '미송 상품 처리' },
   { path: '/returns', label: '반품 관리', icon: RotateCcw, description: '반품 처리 및 이력' },
   { path: '/samples', label: '샘플 관리', icon: Camera, description: '촬영용 상품 대여/반납' },
+  { path: '/catalog/settings', label: '카탈로그', icon: Store, description: '거래처 공유용 카탈로그' },
   { path: '/stats', label: '통계', icon: BarChart3, description: '매출 및 분석' },
   { path: '/notifications', label: '알림', icon: Bell, description: '알림 확인' },
 ]

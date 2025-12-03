@@ -13,6 +13,7 @@ import {
   Truck,
   RotateCcw,
   Camera,
+  Store,
   BarChart3,
   Bell,
   LogOut,
@@ -30,6 +31,7 @@ const navItems = [
   { path: '/backorders', label: '미송', icon: Truck },
   { path: '/returns', label: '반품', icon: RotateCcw },
   { path: '/samples', label: '샘플', icon: Camera },
+  { path: '/catalog/settings', label: '카탈로그', icon: Store },
   { path: '/stats', label: '통계', icon: BarChart3 },
 ]
 

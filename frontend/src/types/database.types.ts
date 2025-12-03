@@ -63,6 +63,8 @@ export interface Database {
           sale_price: number
           memo: string | null
           is_active: boolean
+          image_url: string | null
+          is_public: boolean
           created_at: string
           updated_at: string
         }
@@ -76,6 +78,8 @@ export interface Database {
           sale_price?: number
           memo?: string | null
           is_active?: boolean
+          image_url?: string | null
+          is_public?: boolean
           created_at?: string
           updated_at?: string
         }
@@ -89,6 +93,8 @@ export interface Database {
           sale_price?: number
           memo?: string | null
           is_active?: boolean
+          image_url?: string | null
+          is_public?: boolean
           updated_at?: string
         }
       }
@@ -532,6 +538,52 @@ export interface Database {
           updated_at?: string
         }
       }
+      shop_profiles: {
+        Row: {
+          id: string
+          user_id: string
+          slug: string
+          display_name: string
+          building: string | null
+          description: string | null
+          phone: string | null
+          kakao_id: string | null
+          is_active: boolean
+          show_prices: boolean
+          categories: string[]
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          slug: string
+          display_name: string
+          building?: string | null
+          description?: string | null
+          phone?: string | null
+          kakao_id?: string | null
+          is_active?: boolean
+          show_prices?: boolean
+          categories?: string[]
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          slug?: string
+          display_name?: string
+          building?: string | null
+          description?: string | null
+          phone?: string | null
+          kakao_id?: string | null
+          is_active?: boolean
+          show_prices?: boolean
+          categories?: string[]
+          updated_at?: string
+        }
+      }
     }
     Views: {
       [_ in never]: never
@@ -595,6 +647,7 @@ export type StockLog = Tables<'stock_logs'>
 export type Backorder = Tables<'backorders'>
 export type Return = Tables<'returns'>
 export type Sample = Tables<'samples'>
+export type ShopProfile = Tables<'shop_profiles'>
 
 // 확장 타입 (관계 포함)
 export type ProductWithVariants = Product & {

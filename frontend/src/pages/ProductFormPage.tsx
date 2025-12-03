@@ -28,6 +28,7 @@ export default function ProductFormPage() {
     cost_price: 0,
     sale_price: 0,
     memo: '',
+    image_url: '',
   })
 
   const [variants, setVariants] = useState<VariantInput[]>([
@@ -46,6 +47,7 @@ export default function ProductFormPage() {
         cost_price: product.cost_price,
         sale_price: product.sale_price,
         memo: product.memo || '',
+        image_url: product.image_url || '',
       })
       setVariants(
         product.variants?.map(v => ({
@@ -193,6 +195,21 @@ export default function ProductFormPage() {
                 value={formData.category}
                 onChange={handleChange}
               />
+            </div>
+
+            <div className="col-span-2">
+              <label className="data-label block mb-1.5">이미지 URL (카탈로그용)</label>
+              <input
+                type="url"
+                name="image_url"
+                className="input"
+                placeholder="https://example.com/image.jpg"
+                value={formData.image_url}
+                onChange={handleChange}
+              />
+              <p className="text-xs text-fg-tertiary mt-1">
+                외부 이미지 URL을 입력하면 카탈로그에 표시됩니다
+              </p>
             </div>
           </div>
         </div>

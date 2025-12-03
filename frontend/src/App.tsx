@@ -9,6 +9,7 @@ import ProtectedRoute from '@/components/ProtectedRoute'
 // Pages
 import LoginPage from '@/pages/LoginPage'
 import SignUpPage from '@/pages/SignUpPage'
+import CatalogPage from '@/pages/CatalogPage'
 import DashboardPage from '@/pages/DashboardPage'
 import ProductsPage from '@/pages/ProductsPage'
 import ProductFormPage from '@/pages/ProductFormPage'
@@ -24,6 +25,7 @@ import NotificationsPage from '@/pages/NotificationsPage'
 import StatsPage from '@/pages/StatsPage'
 import MorePage from '@/pages/MorePage'
 import InventoryPage from '@/pages/InventoryPage'
+import CatalogSettingsPage from '@/pages/CatalogSettingsPage'
 
 function App() {
   const { initialize, isInitialized } = useAuthStore()
@@ -39,6 +41,9 @@ function App() {
       {/* Public Routes */}
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignUpPage />} />
+
+      {/* 카탈로그 (공개) */}
+      <Route path="/s/:slug" element={<CatalogPage />} />
 
       {/* Protected Routes */}
       <Route
@@ -84,6 +89,9 @@ function App() {
 
         {/* 통계 */}
         <Route path="/stats" element={<StatsPage />} />
+
+        {/* 카탈로그 설정 */}
+        <Route path="/catalog/settings" element={<CatalogSettingsPage />} />
 
         {/* 더보기 (모바일 전용) */}
         <Route path="/more" element={<MorePage />} />
